@@ -2,11 +2,14 @@ version: "2"
 
 services:
   tarantool:
-    image: tarantool/tarantool
-    container_name: mytarantool
+      build: src
+      container_name: mytarantool
+      ports:
+        - 3301:3301
+        - 8000:8000
+      volumes:
+        - .tarantool-data:/var/lib/tarantool
+  nginx:
+    build: nginx
     ports:
-      - 3301:3301
-      - 8000:8000
-    volumes:
-      - .tarantool-data:/var/lib/tarantool
-      - ./src:/opt/tarantool
+      - 80:80

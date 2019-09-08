@@ -1,7 +1,8 @@
-local json = require('json')
+local handlers = {}
+
 local store = require('my-store')
 
-local function GetHandler(req)
+function handlers.get(req)
     local key = req:stash('key')
     if key == nil or type(key) ~= 'string' then
         return { status = 400 };
@@ -19,7 +20,7 @@ local function GetHandler(req)
     })
 end
 
-function PostHandler(req)
+function handlers.post(req)
     local body = req:json();
 
     local key = body.key
@@ -38,7 +39,7 @@ function PostHandler(req)
     return { status = 200 }
 end
 
-function PutHandler(req)
+function handlers.put(req)
     local body = req:json();
 
     local value = body.value;
@@ -53,7 +54,7 @@ function PutHandler(req)
     return { status = 200 }
 end
 
-function DeleteHandler(req)
+function handlers.delete(req)
     local key = req:stash('key')
     if key == nil or type(key) ~= 'string' then
         return { status = 400 };
@@ -68,9 +69,4 @@ function DeleteHandler(req)
     return { status = 200 };
 end
 
-local httpd = require('http.server').new('0.0.0.0', 8000)
-httpd:route({ path = '/kv/:key', method = 'GET' }, GetHandler)
-httpd:route({ path = '/kv', method = 'POST' }, PostHandler)
-httpd:route({ path = '/kv/:key', method = 'PUT' }, PutHandler)
-httpd:route({ path = '/kv/:key', method = 'DELETE' }, DeleteHandler)
-httpd:start()
+return handlers
