@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  tarantool:
+    image: tarantool/tarantool
+    container_name: mytarantool
+    ports:
+      - 3301:3301
+      - 8000:8000
+    volumes:
+      - .tarantool-data:/var/lib/tarantool
+      - ./src:/opt/tarantool
